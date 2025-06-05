@@ -1,0 +1,63 @@
+/*!******************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/testimonial/style.scss ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************/
+.fb-testimonial-section {
+  display: block;
+  transition: ease-in-out 0.5s;
+}
+.fb-testimonial-section.fb-testimonial-section-left {
+  text-align: left;
+}
+.fb-testimonial-section.fb-testimonial-section-center {
+  text-align: center;
+}
+.fb-testimonial-section.fb-testimonial-section-right {
+  text-align: right;
+}
+.fb-testimonial-section .fb-testimonial-wrapper {
+  width: 100%;
+}
+.fb-testimonial-section .fb-testimonial-rating .fb-testimonial-rating-icon {
+  display: inline-block;
+}
+.fb-testimonial-section .fb-testimonial-rating svg {
+  transition: ease-in-out 0.5s;
+}
+.fb-testimonial-section .fb-testimonial-author-container {
+  display: flex;
+  align-items: center;
+}
+.fb-testimonial-section .fb-testimonial-author-container.left {
+  justify-content: flex-start;
+}
+.fb-testimonial-section .fb-testimonial-author-container.center {
+  justify-content: center;
+}
+.fb-testimonial-section .fb-testimonial-author-container.right {
+  justify-content: flex-end;
+}
+.fb-testimonial-section .fb-testimonial-author-container .fb-testimonial-author-inner-container {
+  display: flex;
+  align-items: center;
+}
+.fb-testimonial-section .fb-testimonial-author-container .fb-testimonial-author-inner-container .fb-testimonial-author-image-container .fb-testimonial-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fb-testimonial-section .fb-testimonial-author-container .fb-testimonial-author-inner-container .fb-testimonial-author-image-container .fb-testimonial-image img {
+  max-width: 100%;
+}
+.fb-testimonial-section .fb-testimonial-author-container .fb-testimonial-author-inner-container .fb-testimonial-userinfo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.fb-testimonial-section .fb-testimonial-quote-icon {
+  display: inline-block;
+}
+.fb-testimonial-section .fb-testimonial-quote-icon svg {
+  transition: ease-in-out 0.5s;
+}
+
+/*# sourceMappingURL=style-index.css.map*/

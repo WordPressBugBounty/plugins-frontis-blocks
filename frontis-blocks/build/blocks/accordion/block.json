@@ -1,0 +1,35 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "frontis-blocks/accordion",
+  "version": "1.0.0",
+  "title": "Accordion",
+  "category": "frontis-blocks",
+  "textdomain": "frontis-blocks",
+  "description": "A customizable accordion block for organizing content in a collapsible format.",
+  "example": {},
+  "supports": {
+    "anchor": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "customClassName": false
+  },
+  "providesContext": {
+    "fb/accordionItemID": "blockID",
+    "fb/accordionparentBlockID": "blockID",
+    "fb/accordionInheritedAccordionType": "accordionType",
+    "fb/accordionInheritedDisplayIcon": "displayIcon",
+    "fb/accordionInheritedTabIconSwitcher": "tabIconSwitcher",
+    "fb/accordionInheritedTabIcon": "tabIcon",
+    "fb/accordionInheritedTabImageUrl": "tabImageUrl",
+    "fb/accordionInheritedExpandedIconSwitcher": "expandedIconSwitcher",
+    "fb/accordionInheritedExpandedIcon": "expandedIcon",
+    "fb/accordionInheritedExpandedImageUrl": "expandedImageUrl",
+    "fb/accordionInheritedTagName": "tagName",
+    "fb/accordionFaqSchema": "faqSchema"
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css"
+}

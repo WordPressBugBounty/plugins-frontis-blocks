@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "frontis-blocks/marquee-carousel",
+  "version": "1.0.0",
+  "title": "Marquee Carousel",
+  "category": "frontis-blocks",
+  "description": "Marquee Carousel block",
+  "example": {},
+  "supports": {
+    "html": false,
+    "anchor": false,
+    "customClassName": false,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "textdomain": "frontis-blocks",
+  "editorScript": [
+    "file:./index.js",
+    "frontis-swiper-script"
+  ],
+  "editorStyle": [
+    "file:./index.css",
+    "frontis-swiper-style"
+  ]
+}

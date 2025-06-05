@@ -1,0 +1,17 @@
+@media only screen and (min-width: 1025px) {
+    .fb-desktop-responsive {
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    .fb-tablet-responsive {
+        display: none !important;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .fb-mobile-responsive {
+        display: none !important;
+    }
+}

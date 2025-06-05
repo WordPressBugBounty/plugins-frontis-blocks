@@ -1,0 +1,145 @@
+/*!************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/advanced-heading/editor.scss ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************/
+/** Start General scss for Advanced Heading **/
+.fb-advanced-sub-heading-wrapper .components-base-control,
+.fb-advanced-separator-wrapper .components-base-control {
+  margin-bottom: 8px;
+}
+
+.fb-advanced-heading-bg-image {
+  margin-bottom: 16px;
+}
+.fb-advanced-heading-bg-image .components-base-control__field {
+  display: block;
+}
+.fb-advanced-heading-bg-image .fb-image-avatar-control {
+  background-color: #ccc;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 6px;
+  height: 150px;
+  margin-bottom: 16px;
+  padding: 2px;
+  position: relative;
+  width: 100%;
+}
+.fb-advanced-heading-bg-image .fb-image-avatar-control .fb-image-avatar-delete {
+  margin: 0 8px !important;
+  padding: 0 !important;
+  position: absolute;
+  right: 0;
+  align-items: center;
+  background: none;
+  border: 0;
+  border-radius: 2px;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: inherit;
+  font-weight: 400;
+  height: 36px;
+  text-decoration: none;
+  transition: box-shadow 0.1s linear;
+}
+.fb-advanced-heading-bg-image .fb-image-avatar-control .fb-image-avatar-delete svg {
+  fill: none;
+  filter: drop-shadow(1px 1px 3px rgb(100, 100, 100));
+}
+.fb-advanced-heading-bg-image .fb-image-avatar-control .fb-image-replace-btn {
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  background: hsla(0, 0%, 95%, 0.749);
+  border-radius: 0 0 6px 6px;
+  bottom: 0;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  transition: 0.3s;
+  width: 100%;
+  color: #000;
+  font-size: 13px;
+  align-items: center;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 400;
+  height: 36px;
+  margin: 0;
+  padding: 6px 12px;
+  text-decoration: none;
+}
+.fb-advanced-heading-bg-image .fb-image-avatar-control .fb-image-replace-btn svg {
+  fill: none;
+}
+.fb-advanced-heading-bg-image .fb-image-upload-btn {
+  background-color: #f2f2f2;
+  background-image: url(../../images/transparent-bg-demo.7b6d940d.png);
+  border: 1px solid #e9e8eb;
+  border-radius: 6px;
+  height: 130px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 400;
+  margin: 0;
+  text-decoration: none;
+  transition: box-shadow 0.1s linear;
+}
+
+.fb-advanced-icon-wrapper {
+  display: flex;
+  align-items: center;
+}
+.fb-advanced-icon-wrapper .fb-advanced-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fb-advanced-heading.active-line::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #B0D7FF;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+}
+
+.fb-advanced-heading.active-line::before {
+  content: "";
+  position: absolute;
+  width: 30%;
+  height: 3px;
+  background-color: #399CFF;
+  bottom: -5px;
+  z-index: 1;
+}
+
+.fb-advanced-heading-before-after {
+  width: 100%;
+}
+
+.fb-advanced-wrapper[style*="text-align: left"] .fb-advanced-heading.active-line::before {
+  left: 0;
+}
+
+.fb-advanced-wrapper[style*="text-align: center"] .fb-advanced-heading.active-line::before {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.fb-advanced-wrapper[style*="text-align: right"] .fb-advanced-heading.active-line::before {
+  right: 0;
+}
+
+/*# sourceMappingURL=index.css.map*/

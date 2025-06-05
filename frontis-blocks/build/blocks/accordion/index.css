@@ -1,0 +1,67 @@
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/accordion/editor.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************/
+.fb-setting-responsive-control-wrapper .fb-setting-responsive-control {
+  margin-bottom: 0;
+}
+
+.fb-setting-color-panel-btn {
+  display: flex !important;
+  width: 100%;
+}
+.fb-setting-color-panel-btn .fb-setting-color-panel-btn-switchr {
+  width: 100%;
+  justify-content: center;
+  height: unset;
+  padding: 10px;
+  line-height: 16px;
+  min-height: 30px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #5f5f5f !important;
+  box-shadow: inset 0 0 0 1px #dcdcde;
+}
+.fb-setting-color-panel-btn .fb-setting-color-panel-btn-switchr.active {
+  background-color: #dcdcde;
+}
+
+/** End General scss for Advanced Button **/
+.fb-accordion-add-button-wrapper {
+  margin-top: 24px;
+}
+.fb-accordion-add-button-wrapper .fb-accordion-add-button {
+  padding: 12px 24px !important;
+  background-color: #EBF5FF;
+  border-radius: 8px;
+  height: auto;
+  color: #000000;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+.fb-accordion-add-button-wrapper .fb-accordion-add-button:hover {
+  color: #000000;
+}
+.fb-accordion-add-button-wrapper .fb-accordion-add-button .dashicons-plus {
+  font-size: 18px;
+  padding: 0;
+  width: unset;
+  height: unset;
+  margin-bottom: -4px;
+}
+.fb-accordion-add-button-wrapper .fb-accordion-add-button .fb-accordion-add-button-label {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.fb-accordion-item-main-wrapper .fb-accordion-item-title-wrapper .fb-accordion-title {
+  margin: 0;
+}
+
+.fb-accordion-item-wrapper .fb-accordion-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/*# sourceMappingURL=index.css.map*/

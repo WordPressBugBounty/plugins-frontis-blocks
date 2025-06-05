@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "frontis-blocks/fluent-form",
+  "version": "1.0.0",
+  "title": "Fluent Form",
+  "category": "frontis-blocks",
+  "description": "A customizable fluent form block with various styling options.",
+  "example": {},
+  "supports": {
+    "anchor": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "customClassName": false
+  },
+  "textdomain": "frontis-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "render": "file:./render.php",
+  "attributes": {
+    "blockID": {
+      "type": "string",
+      "default": ""
+    },
+    "deviceType": {
+      "type": "string",
+      "default": "Desktop"
+    },
+    "fluentFormGlobalZIndex": {
+      "type": "number"
+    },
+    "formId": {
+      "type": "string"
+    },
+    "showLabels": {
+      "type": "boolean",
+      "default": true
+    },
+    "showPlaceholder": {
+      "type": "boolean",
+      "default": true
+    },
+    "showErrorMessage": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

@@ -1,0 +1,20 @@
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/counter-number/style.scss ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************/
+.fb-counter-wrapper {
+  display: flex;
+  gap: 50px;
+}
+.fb-counter-wrapper .fb-counter-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.fb-counter-wrapper .fb-counter-item .fb-counter-number-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+/*# sourceMappingURL=style-index.css.map*/

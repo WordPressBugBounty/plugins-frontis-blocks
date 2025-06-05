@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "frontis-blocks/slider",
+  "version": "1.0.0",
+  "title": "Slider",
+  "category": "frontis-blocks",
+  "textdomain": "frontis-blocks",
+  "description": "A customizable slider block for displaying slides with various styling options.",
+  "example": {},
+  "supports": {
+    "anchor": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "customClassName": false
+  },
+  "editorScript": [
+    "file:./index.js",
+    "frontis-swiper-script"
+  ],
+  "editorStyle": [
+    "file:./index.css",
+    "frontis-swiper-style"
+  ]
+}

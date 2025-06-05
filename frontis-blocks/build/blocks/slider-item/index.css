@@ -1,0 +1,74 @@
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/slider-item/editor.scss ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************/
+.fb-setting-responsive-control-wrapper .fb-setting-responsive-control {
+  margin-bottom: 0;
+}
+
+/** End General scss for Advanced Button **/
+.fb-slider-wrapper .dnd-items-wrapper {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.fb-slider-wrapper .dnd-items-wrapper li.sortable-item {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.fb-slider-wrapper .dnd-items-wrapper li.sortable-item .sortable-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.fb-slider-wrapper .dnd-items-wrapper li.sortable-item .sortable-header .sortable-title {
+  flex: 12;
+  cursor: pointer;
+  overflow: hidden;
+  padding-left: 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 200px;
+}
+.fb-slider-wrapper .dnd-items-wrapper li.sortable-item .sortable-header .sortable-sort {
+  border-right: 1px solid #b4b4cb;
+  border-left: 1px solid #b4b4cb;
+}
+.fb-slider-wrapper .dnd-items-wrapper li.sortable-item .sortable-header .sortable-sort button:focus {
+  box-shadow: none;
+  outline: none;
+}
+.fb-slider-wrapper .dnd-items-wrapper li.sortable-item .sortable-header .sortable-delete button {
+  color: #d63638;
+}
+.fb-slider-wrapper .dnd-items-wrapper li.sortable-item .sortable-header .sortable-delete button:focus {
+  box-shadow: none;
+  outline: none;
+}
+.fb-slider-wrapper .dnd-items-wrapper li.sortable-item .sortable-item-content {
+  padding-top: 10px;
+}
+
+.fb-slider-content-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: clamp(300px, 60vh, 500px);
+  justify-content: center;
+}
+.fb-slider-content-wrapper .fb-slider-content-inner {
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 80%;
+  padding: clamp(15px, 6vw, 30px);
+  text-align: center;
+  width: 100%;
+}
+
+.swiper-wrapper {
+  height: auto !important;
+}
+
+/*# sourceMappingURL=index.css.map*/

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "frontis-blocks/social-icons",
+  "version": "1.0.0",
+  "title": "Social Icons",
+  "category": "frontis-blocks",
+  "description": "A customizable social icons block with various styling options.",
+  "example": {},
+  "supports": {
+    "anchor": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "customClassName": false
+  },
+  "textdomain": "frontis-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css"
+}

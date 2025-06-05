@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "title": "Call to Action",
+  "name": "frontis-blocks/call-to-action",
+  "version": "1.0.0",
+  "category": "frontis-blocks",
+  "description": "A customizable call to action block with various styling options.",
+  "example": {},
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false,
+    "anchor": false,
+    "customClassName": false
+  },
+  "textdomain": "frontis-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css"
+}

@@ -1,0 +1,20 @@
+/*!****************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/info-box/editor.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************/
+.fb-info-box-wrapper-inner .fb-icon-wrapper {
+  line-height: 0;
+}
+.fb-info-box-wrapper-inner .fb-info-btn-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.fb-info-box-wrapper-inner .fb-info-btn-wrapper .fb-btn-icon-wrapper {
+  line-height: 0;
+}
+.fb-info-box-wrapper-inner .fb-info-media-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+/*# sourceMappingURL=index.css.map*/

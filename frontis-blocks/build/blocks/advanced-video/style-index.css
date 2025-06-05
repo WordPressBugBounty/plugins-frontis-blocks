@@ -1,0 +1,56 @@
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/advanced-video/style.scss ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************/
+.fb-parent-wrapper {
+  filter: unset;
+}
+.fb-parent-wrapper .fb-advanced-video-wrapper {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  transition: 0.5s;
+  transition: border 0.5s, border-radius 0.5s, box-shadow 0.5s;
+}
+.fb-parent-wrapper .fb-advanced-video-wrapper .fb-player-wrapper {
+  padding-top: 56.25%;
+  position: relative;
+  transition: transform 0.5s, border 0.5s, border-radius 0.5s, box-shadow 0.5s;
+}
+.fb-parent-wrapper .fb-advanced-video-wrapper .fb-player-wrapper .fb-player-option .fb-react-player {
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+.fb-parent-wrapper .fb-advanced-video-wrapper .fb-player-wrapper .fb-player-option .fb-react-player iframe {
+  box-sizing: border-box;
+}
+.fb-parent-wrapper .fb-advanced-video-wrapper .fb-player-wrapper .fb-player-option .fb-react-player .react-player__shadow {
+  display: none !important;
+}
+
+.fb-advanced-video-main-wrapper {
+  width: 100%;
+}
+.fb-advanced-video-main-wrapper:focus-visible {
+  outline: none;
+}
+.fb-advanced-video-main-wrapper .fb-parent-wrapper:focus-visible {
+  outline: none;
+}
+.fb-advanced-video-main-wrapper .fb-parent-wrapper .fb-advanced-video-wrapper:focus-visible {
+  outline: none;
+}
+.fb-advanced-video-main-wrapper .fb-parent-wrapper .fb-advanced-video-wrapper .fb-player-wrapper:focus-visible {
+  outline: none;
+}
+.fb-advanced-video-main-wrapper .fb-parent-wrapper .fb-advanced-video-wrapper .fb-player-wrapper .fb-player-option:focus-visible {
+  outline: none;
+}
+.fb-advanced-video-main-wrapper .fb-parent-wrapper .fb-advanced-video-wrapper .fb-player-wrapper .fb-player-option .fb-react-player:focus-visible {
+  outline: none;
+}
+.fb-advanced-video-main-wrapper .fb-parent-wrapper .fb-advanced-video-wrapper .fb-player-wrapper .fb-player-option .fb-react-player div:focus-visible {
+  outline: none;
+}
+
+/*# sourceMappingURL=style-index.css.map*/

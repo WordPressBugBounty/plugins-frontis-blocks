@@ -1,0 +1,104 @@
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/animated-heading/style.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************/
+.fb-animated-heading-wrapper {
+  margin: 0;
+}
+
+.fb-animated-heading-wrapper h1,
+.fb-animated-heading-wrapper h2,
+.fb-animated-heading-wrapper h3,
+.fb-animated-heading-wrapper h4,
+.fb-animated-heading-wrapper h5,
+.fb-animated-heading-wrapper h6,
+.fb-animated-heading-wrapper p {
+  display: inline-block !important;
+  margin: 0;
+}
+
+.fb-animated-heading-cursor {
+  font-size: 40px;
+  line-height: 40px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.fb-animated-heading-item {
+  display: none;
+}
+
+.fb-animated-heading-swirl-wrapper {
+  display: inline-block;
+  transition: all 0.5s ease-in-out;
+  vertical-align: bottom;
+}
+
+.fb-animated-heading-dynamic-wrapper {
+  display: inline-block;
+  position: relative;
+  perspective: 300px;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.fb-animated-heading-dynamic-text {
+  transform: scaleX(1.0005);
+  white-space: nowrap;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.fb-animated-heading-dynamic-text.fb-animated-heading-text-active {
+  position: relative;
+  opacity: 1;
+}
+
+.fb-animated-heading-dynamic-letter {
+  backface-visibility: hidden;
+  display: inline-block;
+  transform-style: preserve-3d;
+  opacity: 0;
+  transform: translateZ(-20px) rotateX(90deg);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.fb-animated-heading-dynamic-letter.fb-animated-heading-animation-in {
+  animation: fb-animated-heading-swirl-in 0.4s forwards;
+}
+
+.fb-animated-heading-dynamic-letter.fb-animated-heading-animation-out {
+  animation: fb-animated-heading-swirl-out 0.4s forwards;
+}
+
+@keyframes fb-animated-heading-swirl-in {
+  0% {
+    opacity: 0;
+    transform: translateZ(-20px) rotateX(90deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateZ(-20px) rotateX(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(-20px) rotateX(0deg);
+  }
+}
+@keyframes fb-animated-heading-swirl-out {
+  0% {
+    opacity: 1;
+    transform: translateZ(-20px) rotateX(0);
+  }
+  60% {
+    opacity: 0;
+    transform: translateZ(-20px) rotateX(-100deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateZ(-20px) rotateX(-90deg);
+  }
+}
+
+/*# sourceMappingURL=style-index.css.map*/
