@@ -2,6 +2,7 @@
 
 namespace FrontisBlocks\Core;
 
+use FrontisBlocks\Frontend\Blocks\LoopBuilder;
 use FrontisBlocks\Traits\Singleton;
 use FrontisBlocks\Config\BlockList;
 use FrontisBlocks\Utils\Helper;
@@ -31,8 +32,21 @@ class Blocks
 		$blocks_list = BlockList::get_instance()->get_blocks();
 		$active_blocks = get_option('fb_active_blocks');
 
+		$default_container_width = get_option('fb_default_content_width');
+		$container_column_gap = get_option('fb_container_column_gap');
+		$container_row_gap = get_option('fb_container_row_gap');
+		$container_padding = get_option('fb_container_padding');
+
+		$container_widths_json = get_option('fb_default_content_width');
+		$container_widths = json_decode($container_widths_json, true);
+
+		$desktop_breakpoint = isset($container_widths['Desktop']) ? intval($container_widths['Desktop']) : 1200;
+		$tablet_breakpoint = isset($container_widths['Tablet']) ? intval($container_widths['Tablet']) : 1024;
+		$mobile_breakpoint = isset($container_widths['Mobile']) ? intval($container_widths['Mobile']) : 767;
+
+
 		if (!empty($blocks_list)) {
-			foreach ($blocks_list as $block) {	
+			foreach ($blocks_list as $block) {
 				$slug = $block['slug'];
 				$complete = $block['complete'];
 				if (is_array($active_blocks) && !empty($active_blocks)) {
@@ -75,19 +89,36 @@ class Blocks
 						'all_cats' => Helper::get_related_taxonomy(),
 						'all_authors' => Helper::get_all_authors_with_posts(),
 						'image_sizes' => Helper::get_image_sizes(),
-						'desktop_breakpoint' => 1200,
-						'tablet_breakpoint' => 1024,
-						'mobile_breakpoint' => 768,
+						'desktop_breakpoint' => $desktop_breakpoint,
+						'tablet_breakpoint' => $tablet_breakpoint,
+						'mobile_breakpoint' => $mobile_breakpoint,
 						'global_typography' => get_option('fb_globaltypo')
 					];
 
 					$localize_array = array_merge($localize_array, $admin_localize_array);
 				}
 
-				$localize_array['site_url'] = site_url();
-				$localize_array['pluginUrl'] = FB_PLUGIN_URL;
-				$localize_array['fluent_form_install_url'] = admin_url('plugin-install.php?s=Fluent Forms&tab=search&type=term');
-				$localize_array['contact_form7_install_url'] = admin_url('plugin-install.php?s=Contact Form 7&tab=search&type=term');
+				$common_localize_array = [
+					'site_url' => site_url(),
+					'pluginUrl' => FB_PLUGIN_URL,
+					'fluent_form_install_url' => admin_url('plugin-install.php?s=Fluent Forms&tab=search&type=term'),
+					'contact_form7_install_url' => admin_url('plugin-install.php?s=Contact Form 7&tab=search&type=term'),
+					'ajax_url' => admin_url('admin-ajax.php'),
+					'nonce' => wp_create_nonce('fb_post_like_nonce'),
+					'user_logged_in' => is_user_logged_in(),
+					'prefix' => FB_PREFIX,
+					// 'default_container_width' => $default_container_width,
+					'desktop_breakpoint' => $desktop_breakpoint,
+					'tablet_breakpoint' => $tablet_breakpoint,
+					'mobile_breakpoint' => $mobile_breakpoint,
+					'container_column_gap' => $container_column_gap,
+					'container_row_gap' => $container_row_gap,
+					'container_padding' => $container_padding,
+				];
+
+				$localize_array = array_merge($localize_array, $common_localize_array);
+
+				// Localize scripts
 				wp_localize_script($editor_script_handle, 'FrontisBlocksData', $localize_array);
 				wp_localize_script($view_script_handle, 'FrontisBlocksData', $localize_array);
 				wp_localize_script('frontis-blocks-frontend', 'FrontisBlocksData', $localize_array);
@@ -162,8 +193,40 @@ class Blocks
 		return $block_content;
 	}
 
-	public function get_blocks_on_save($post_id, $post, $update) {
-		if($update){
+	public function get_blocks_on_save($post_id, $post, $update)
+	{
+		$post_content = $post->post_content;
+		AssetsGenerator::generate_global_assets();
+
+		// Get synced pattern contents
+		$pattern_contents = Helper::check_patterns_used($post_content);
+
+		// Append pattern contents to post_content
+		if (!empty($pattern_contents)) {
+			foreach ($pattern_contents as $pattern_content) {
+				$post_content .= "\n" . $pattern_content; // Append each pattern content
+			}
+
+			// Pass modified post object to generate_page_assets
+			$post->post_content = $post_content; // Update post object
+		}
+
+		$pattern = "/frontis-blocks/i";
+		update_post_meta($post_id, 'frontis_blocks_used', false);
+
+		if(preg_match_all($pattern, $post->post_content) > 0) {
+			update_post_meta($post_id, 'frontis_blocks_used', true);
+		}
+
+
+		if($post->post_name === 'home-2-2') {
+			$myfile = fopen("assetsgeneration.txt", "w") or die("Unable to open file!");
+			$txt = $post->post_content;
+			fwrite($myfile, $txt);
+			fclose($myfile);
+		}
+
+		if ($update) {
 			AssetsGenerator::get_instance()->generate_page_assets($post_id, $post);
 		}
 	}
@@ -202,20 +265,21 @@ class Blocks
 		return $this->registered_blocks;
 	}
 
-	public function enqueue_google_fonts() {
+	public function enqueue_google_fonts()
+	{
 		$google_fonts = get_option('fb_fontfamilies');
 
-        if(!empty($google_fonts)) {
-            foreach ($google_fonts as $key => $value) {
-                // unique fonts family 
-                if(!in_array($value, $this->gfonts)) {
-                    $this->gfonts[$value] = $value;
-                }
-            }
-        }
+		if (!empty($google_fonts)) {
+			foreach ($google_fonts as $key => $value) {
+				// unique fonts family
+				if (!in_array($value, $this->gfonts)) {
+					$this->gfonts[$value] = $value;
+				}
+			}
+		}
 
-		if(!empty($this->gfonts)) {
-            // Helper::load_google_font( $this->gfonts );
-        }
+		if (!empty($this->gfonts)) {
+			// Helper::load_google_font( $this->gfonts );
+		}
 	}
 }

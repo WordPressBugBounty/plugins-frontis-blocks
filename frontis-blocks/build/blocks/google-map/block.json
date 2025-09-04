@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "frontis-blocks/google-map",
+  "version": "1.0.0",
+  "title": "Google Map",
+  "category": "frontis-blocks",
+  "description": "Add a Google Map to the block editor, no API key required.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "anchor": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "customClassName": false
+  },
+  "textdomain": "frontis-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css"
+}

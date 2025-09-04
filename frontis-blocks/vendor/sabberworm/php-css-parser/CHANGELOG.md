@@ -7,11 +7,27 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+## 8.9.0: New features, bug fixes and deprecations
+
+### Added
+
+- `RuleSet::removeMatchingRules()` method
+  (for the implementing classes `AtRuleSet` and `DeclarationBlock`) (#1249)
+- `RuleSet::removeAllRules()` method
+  (for the implementing classes `AtRuleSet` and `DeclarationBlock`) (#1249)
 - Add Interface `CSSElement` (#1231)
 - Methods `getLineNumber` and `getColumnNumber` which return a nullable `int`
   for the following classes:
   `Comment`, `CSSList`, `SourceException`, `Charset`, `CSSNamespace`, `Import`,
-  `Rule`, `DeclarationBlock`, `RuleSet`, `CSSFunction`, `Value` (#1225)
+  `Rule`, `DeclarationBlock`, `RuleSet`, `CSSFunction`, `Value` (#1225, #1263)
 - `Positionable` interface for CSS items that may have a position
   (line and perhaps column number) in the parsed CSS (#1221)
 
@@ -26,6 +42,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Deprecated
 
+- Support for PHP < 7.2 is deprecated; version 9.0 will require PHP 7.2 or later
+  (#1264)
+- Passing a `string` or `null` to `RuleSet::removeRule()` is deprecated
+  (implementing classes are `AtRuleSet` and `DeclarationBlock`);
+  use `removeMatchingRules()` or `removeAllRules()` instead (#1249)
+- Passing a `Rule` to `RuleSet::getRules()` or `getRulesAssoc()` is deprecated,
+  affecting the implementing classes `AtRuleSet` and `DeclarationBlock`
+  (call e.g. `getRules($rule->getRule())` instead) (#1248)
 - Passing a string as the first argument to `getAllValues()` is deprecated;
   the search pattern should now be passed as the second argument (#1241)
 - Passing a Boolean as the second argument to `getAllValues()` is deprecated;
@@ -39,9 +63,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Providing zero as the line number argument to `Rule::setPosition()` is
   deprecated (pass `null` instead if there is no line number) (#1225, #1233)
 
-### Removed
-
 ### Fixed
+
+- Set line number when `RuleSet::addRule()` called with only column number set
+  (#1265)
+- Ensure first rule added with `RuleSet::addRule()` has valid position (#1262)
 
 ## 8.8.0: Bug fixes and deprecations
 

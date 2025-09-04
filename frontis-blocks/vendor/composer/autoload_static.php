@@ -20,6 +20,10 @@ class ComposerStaticInitd1a84656a6acb700f27e23c26b1775ba
         array (
             'FrontisBlocks\\' => 14,
         ),
+        'A' => 
+        array (
+            'Appsero\\' => 8,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -39,10 +43,16 @@ class ComposerStaticInitd1a84656a6acb700f27e23c26b1775ba
         array (
             0 => __DIR__ . '/../..' . '/includes',
         ),
+        'Appsero\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/appsero/client/src',
+        ),
     );
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'WP_Async_Request' => __DIR__ . '/..' . '/deliciousbrains/wp-background-processing/classes/wp-async-request.php',
+        'WP_Background_Process' => __DIR__ . '/..' . '/deliciousbrains/wp-background-processing/classes/wp-background-process.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

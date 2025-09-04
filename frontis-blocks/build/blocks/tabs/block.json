@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "frontis-blocks/tabs",
+  "version": "1.0.0",
+  "title": "Tabs",
+  "category": "frontis-blocks",
+  "description": "Create an accessible Tabs block with smooth switching and customizable content.",
+  "textdomain": "frontis-blocks",
+  "supports": {
+    "html": false,
+    "anchor": false,
+    "customClassName": false,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "editorScript": [
+    "file:./index.js"
+  ],
+  "editorStyle": [
+    "file:./index.css"
+  ],
+  "style": [
+    "file:./style.css"
+  ],
+  "viewScript": [
+    "file:./view.js"
+  ]
+}

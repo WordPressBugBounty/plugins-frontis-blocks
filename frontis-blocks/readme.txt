@@ -3,7 +3,7 @@ Contributors: wpmessiah
 Tags: block, blocks, blocks-editor, gutenberg,  gutenberg blocks,
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html 
@@ -45,7 +45,7 @@ Our **WordPress Gutenberg blocks plugin** offers a rich set of blocks to cover a
  - **Social Icons:** Multiple styles showcasing social media icons, ranging from minimalistic to brightly colored backgrounds, with or without text labels. This offers flexibility for integration into different website themes while maintaining brand consistency.
  - **Post Grid:** Arrange posts or articles in a grid layout, optimizing the use of space and providing a clean, organized way to browse content. Different styles may include varying image sizes, hover effects, and metadata configurations.
  - **Team Member:** Displays team member profiles in various formats, from basic lists to more dynamic presentations with social media links and detailed bios. This helps personalize a brand and showcase the people behind it in a visually engaging manner.
- - **Advanced Navigation(Coming Soon):** Provides various navigation menu styles that can enhance the user interface of websites or applications. This feature includes options like multi-level dropdowns, mega menus, or icon-based navigation that improve the discoverability of site content.
+ - **Advanced Navigation:** Provides various navigation menu styles that can enhance the user interface of websites or applications. This feature includes options like multi-level dropdowns, mega menus, or icon-based navigation that improve the discoverability of site content.
  - **Slider:** Add eye-catching sliders to your site using the Slider Block. Display multiple images or content slides in a rotating carousel with transition effects. Fully customizable to suit hero sections, product showcases, or testimonials.
  - **Marquee Carousel:** Showcase continuous scrolling content with the Marquee Carousel Block. Ideal for displaying partner logos, product highlights, or announcement tickers in a smooth, horizontal scroll. Customize speed, direction, and content with ease.
 
@@ -107,6 +107,35 @@ There is no prerequisites for installing **Frontis Blocks**. You can follow the 
 
 
 == Changelog ==
+
+= 1.0.9 – 04 September 2025 =
+New Blocks:
+Advanced Navigation
+Gogle map
+Flip Box
+Tabs
+
+New Features:
+Added Default Container Width option in the Frontis dashboard
+Added Container Column Gap
+Added Container Row Gap
+Added Container Padding
+Automatic Block Recovery
+Copy & Paste Styles
+Quick Action Bar
+
+Resolved Issues
+- Advanced Button Block – Fixed background color reset, removed width limitation (now supports larger values), eliminated unnecessary icon gap for icon-only buttons, removed unwanted placeholder text when button text is cleared, and resolved wrapper conflict with slider controls.
+
+- Post Grid Block – Fixed “Read More” button background reset issue and ensured “Load More” button hides automatically once all posts are loaded.
+
+- Team Member Block – Added responsive alignment controls for both Social Profiles (Basic Tab) and Content section (Style Tab).
+
+- Testimonial Block – Fixed author hover color issue where the normal color was changing automatically.
+
+- Advanced Image Block – Fixed issue where selecting an image from the Media Library did not display it in the block. Direct upload now works as expected.
+
+- Global Typography Settings – Increased maximum value support for font size and line height (200px+). Fixed UI overflow bug.
 
 = 1.0.8 – 23 May 2025 =
 New Features:

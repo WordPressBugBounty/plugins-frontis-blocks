@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "frontis-blocks/tabs-item",
+  "version": "1.0.0",
+  "title": "Tabs Item",
+  "category": "frontis-blocks",
+  "description": "A single tab panel with its own content.",
+  "textdomain": "frontis-blocks",
+  "parent": [
+    "frontis-blocks/tabs"
+  ],
+  "supports": {
+    "anchor": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "customClassName": false
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style.css"
+}

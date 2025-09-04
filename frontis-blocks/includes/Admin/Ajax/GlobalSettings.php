@@ -48,6 +48,7 @@ class GlobalSettings extends AjaxBase
             'get_fontfamilies',
             'import_demo_data',
             'import_full_site',
+            'toggle_post_like',
         ];
 
         $this->init_ajax_events($events);
@@ -239,7 +240,8 @@ class GlobalSettings extends AjaxBase
      */
     private function update_option($option_name, $type)
     {
-        $updated = update_option($option_name, $_POST['data'], true);
+        $post_data = isset($_POST['data']) ? $_POST['data'] : [];
+        $updated = update_option($option_name, $post_data, true);
 
         if ($updated) {
             $global_colors = get_option($option_name);
@@ -267,6 +269,79 @@ class GlobalSettings extends AjaxBase
                 return is_array($value) ? $value : [];
             default:
                 return sanitize_text_field($value);
+        }
+    }
+
+    public function toggle_post_like()
+    {
+        // Verify nonce for security
+        if (!wp_verify_nonce($_POST['nonce'], 'fb_post_like_nonce')) {
+            wp_send_json_error('Security check failed');
+            return;
+        }
+
+        // Check if user is logged in
+        if (!is_user_logged_in()) {
+            wp_send_json_error('User must be logged in to like posts');
+            return;
+        }
+
+        $post_id = intval($_POST['post_id']);
+        $user_id = get_current_user_id();
+
+        // Validate post exists
+        if (!get_post($post_id)) {
+            wp_send_json_error('Invalid post ID');
+            return;
+        }
+
+        // Get current user's liked posts
+        $user_likes = get_user_meta($user_id, 'liked_posts', true);
+        if (!is_array($user_likes)) {
+            $user_likes = array();
+        }
+
+        // Get current post likes count
+        $current_likes = get_post_meta($post_id, 'post_likes_count', true);
+        $current_likes = $current_likes ? intval($current_likes) : 0;
+
+        $is_liked = in_array($post_id, $user_likes);
+        $new_liked_status = !$is_liked;
+
+        if ($new_liked_status) {
+            $user_likes[] = $post_id;
+            $new_likes_count = $current_likes + 1;
+        } else {
+            $user_likes = array_diff($user_likes, array($post_id));
+            $new_likes_count = max(0, $current_likes - 1);
+        }
+
+        update_user_meta($user_id, 'liked_posts', array_values($user_likes));
+
+        update_post_meta($post_id, 'post_likes_count', $new_likes_count);
+
+        wp_send_json_success(array(
+            'liked' => $new_liked_status,
+            'count' => $new_likes_count,
+            'formatted_count' => $this->format_metric_count($new_likes_count)
+        ));
+    }
+
+    /**
+     * Format metric count method for your plugin class
+     */
+    public function format_metric_count($count)
+    {
+        $num = intval($count);
+
+        if ($num >= 1000000) {
+            $formatted = round($num / 1000000, 2);
+            return $formatted . 'M';
+        } elseif ($num >= 1000) {
+            $formatted = round($num / 1000, 2);
+            return $formatted . 'k';
+        } else {
+            return strval($num);
         }
     }
 

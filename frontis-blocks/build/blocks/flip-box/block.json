@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "title": "Flip Box",
+  "name": "frontis-blocks/flip-box",
+  "version": "1.0.0",
+  "category": "frontis-blocks",
+  "description": "A customizable Flip box block with various styling options.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "customClassName": false
+  },
+  "textdomain": "frontis-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css"
+}

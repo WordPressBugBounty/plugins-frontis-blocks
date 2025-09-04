@@ -14,7 +14,7 @@ class Helper
      */
     public static function is_frontis_block($block_content, $parsed_block, $class_attr = 'blockClass')
     {
-        return isset($parsed_block['attrs'][$class_attr]) && strpos($parsed_block['attrs'][$class_attr], 'frontis-block') !== false;
+        return isset($parsed_block['blockName']) && str_contains($parsed_block['blockName'], 'frontis-block');
     }
 
     /**
@@ -123,8 +123,7 @@ class Helper
      * @since 1.11.0
      * @access public
      */
-    public static function get_related_taxonomy()
-    {
+    public static function get_related_taxonomy(){
 
 
         $post_types = self::get_post_types();
@@ -178,10 +177,15 @@ class Helper
 
     public static function get_page_name()
     {
-        global $wp_query;
-        if ($wp_query->queried_object) {
-            return $wp_query->queried_object->post_name;
-        }
+		global $wp_query;
+
+		if ($wp_query->queried_object && isset($wp_query->queried_object->post_name)) {
+			return $wp_query->queried_object->post_name;
+		} else {
+			if(isset($wp_query->queried_object->name)){
+				return $wp_query->queried_object->name;
+			}
+		}
     }
 
     public static function remove_css_files()
@@ -369,41 +373,41 @@ class Helper
                 return str_replace(' ', '+', $font) . ":100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic";
             }, $fonts));
 
-            echo $font_url;
+//            echo $font_url;
             // $gfonts = '';
             // $gfonts_attr = ':100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic';
-            
+
             // foreach ($fonts as $font) {
             //     $gfonts .= str_replace(' ', '+', trim($font)) . $gfonts_attr . '|';
             // }
-            
+
             // $gfonts = rtrim($gfonts, '|');
-            
+
             // if (!empty($gfonts)) {
             //     $query_args = [
             //         'family' => $gfonts,
             //         'display' => 'swap'
             //     ];
-                
+
             //     wp_enqueue_style(
             //         'frontis-blocks-preconnect',
             //         'https://fonts.googleapis.com',
             //         [],
             //         null
             //     );
-                
+
             //     wp_style_add_data('frontis-blocks-preconnect', 'crossorigin', 'anonymous');
-                
+
             //     wp_register_style(
             //         'frontis-blocks-fonts',
             //         add_query_arg($query_args, 'https://fonts.googleapis.com/css2'),
             //         [],
             //         FB_VERSION
             //     );
-                
+
             //     wp_enqueue_style('frontis-blocks-fonts');
             // }
-            
+
             // Reset.
             $gfonts = '';
         }
@@ -438,19 +442,26 @@ class Helper
         return $font_data;
 	}
 
+	public static function option_exists($option_name, $site_wide = false) {
+		global $wpdb;
+		$table = $site_wide ? $wpdb->base_prefix . 'options' : $wpdb->prefix . 'options';
+		$row = $wpdb->get_row($wpdb->prepare("SELECT option_value FROM $table WHERE option_name = %s LIMIT 1", $option_name));
+		return is_object($row);
+	}
+
     // Get font families from global settings
     public static function extract_font_families($data) {
         $fontFamilies = array();
-    
+
         // Convert the array to a string representation
         $dataString = var_export($data, true);
-        
+
         // Pattern to match fontFamily and fontWeight pairs
         $pattern = '/\'fontFamily\'\s*=>\s*\'([^\']*)\',(?:.*?)\'fontWeight\'\s*=>\s*\'([^\']*)\'/s';
-        
+
         // Perform the regex matching
         preg_match_all($pattern, $dataString, $matches, PREG_SET_ORDER);
-        
+
         // Process matches
         foreach ($matches as $match) {
             $fontFamily = $match[1];
@@ -462,7 +473,7 @@ class Helper
                 $fontFamilies[$fontFamily][] = $fontWeight;
             }
         }
-        
+
         return $fontFamilies;
     }
 
@@ -471,7 +482,7 @@ class Helper
 		$files = scandir($dir);
 		foreach ($files as $file) {
 			if ($file == '.' || $file == '..') continue;
-			
+
 			$path = $dir . '/' . $file;
 			if (is_dir($path)) {
 				// Recursively scan subdirectories
@@ -480,7 +491,7 @@ class Helper
 				$cssFiles[] = $path;
 			}
 		}
-		
+
 		return $cssFiles;
 	}
 
@@ -488,19 +499,18 @@ class Helper
 		$jsFiles = [];
 		$files = scandir($dir);
 		foreach ($files as $file) {
-			if ($file == '.' || $file == '..') continue;    
-			
+			if ($file == '.' || $file == '..') continue;
+
 			$path = $dir . '/' . $file;
 			if (is_dir($path)) {
 				$jsFiles = array_merge($jsFiles, self::get_js_files($path));
 			} else if (pathinfo($path, PATHINFO_EXTENSION) == 'js') {
 				$jsFiles[] = $path;
 			}
-		}   
+		}
 
 		return $jsFiles;
 	}
-
 
     public static function get_blocks_inside_template($block_name)
     {
@@ -520,8 +530,121 @@ class Helper
     public static function create_value_with_unit($value, $unit) {
         return $value . $unit;
     }
-    
+
+	public static function is_custom_post_type( $post_id = null ) {
+		// Get the post type of the given post or current post in the loop
+		$post_type = get_post_type( $post_id ?: get_the_ID() );
+
+		// List of WordPress default post types
+		$default_post_types = array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item', 'wp_template', 'wp_template_part' );
+
+		// Check if the post type is not in the default list
+		return ! in_array( $post_type, $default_post_types );
+	}
+
+	public static function check_patterns_used($post_content)
+	{
+		$pattern_contents = []; // Store pattern contents
+		$pattern_ids = [];
+
+		// Extract synced pattern IDs
+		preg_match_all('/<!--\s*wp:block\s*{"ref":\s*(\d+)\}\s*\/-->/', $post_content, $matches);
+
+		if (!empty($matches[1])) {
+			$pattern_ids = $matches[1]; // Array of synced pattern IDs
+		}
+
+		// Fetch pattern content for each ID
+		if (!empty($pattern_ids)) {
+			foreach ($pattern_ids as $pattern_id) {
+				$pattern_post = get_post($pattern_id);
+				if ($pattern_post && $pattern_post->post_type === 'wp_block') {
+					$pattern_contents[] = $pattern_post->post_content; // Collect pattern content
+				}
+			}
+		}
+
+		return $pattern_contents; // Return array of pattern contents
+	}
+
+	public static function get_all_posts() {
+		// Get all public post types except the excluded ones
+		$excluded_post_types = array('attachment', 'nav_menu_item', 'wp_block', 'wp_navigation', 'wp_global_styles');
+		$args = array(
+			'public' => true,
+		);
+		$post_types = get_post_types($args, 'objects');
+
+		// Initialize the array to hold posts grouped by post type
+		$posts_by_type = array();
+
+		foreach ($post_types as $post_type) {
+			// Skip excluded post types
+			if (in_array($post_type->name, $excluded_post_types)) {
+				continue;
+			}
+
+			// Get all published posts for this post type
+			$posts = get_posts(array(
+				'post_type' => $post_type->name,
+				'post_status' => 'publish',
+				'numberposts' => -1, // Get all posts
+				'fields' => 'ids', // First get just IDs for better performance
+			));
+
+			// If no posts found, skip
+			if (empty($posts)) {
+				continue;
+			}
+
+			// Now get ID and title for each post
+			$posts_by_type[$post_type->name] = array_map(function($post_id) {
+				return array(
+					'ID' => $post_id,
+					'title' => get_the_title($post_id) === '' ? 'No title' : get_the_title($post_id),
+				);
+			}, $posts);
+		}
+
+		return $posts_by_type;
+	}
+
+    public static function get_all_post_ids() {
+        global $wpdb;
+
+        $query = "SELECT ID
+          FROM {$wpdb->posts}
+          WHERE post_status = 'publish'
+          AND post_name != 'wp-global-styles-frontis-theme'
+          AND post_type NOT IN ('wp_font_family', 'wp_navigation', 'wp_global_styles', 'wp_font_face', 'attachment', 'mc4wp-form', 'acf-post-type')
+          ORDER BY post_date DESC";
+          
+		$results = $wpdb->get_results($query);
+
+        if(!empty($results)) {
+            return array_map(function($result) {
+                return $result->ID;
+            }, $results);
+        }
+        
+        return [];
+    }
+
+	// Render dynamic content for block
+	public static function render_dynamic_content($block_data) {
+	}
+
+	public static function get_single_field($post_id, $field) {
+		global $wpdb;
+		$query = $wpdb->prepare(
+			"SELECT $field FROM $wpdb->posts WHERE ID = %d",
+			$post_id
+		);
+
+		return $wpdb->get_var($query) ?: '';
+	}
+
+	public static function json_success($data) {
+		wp_send_json_success($data, 200 );
+	}
 }
-
-
-https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap

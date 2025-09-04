@@ -4,9 +4,8 @@ namespace FrontisBlocks\Admin\Ajax;
 
 use FrontisBlocks\Traits\Singleton;
 use FrontisBlocks\Config\BlockList;
-use FrontisBlocks\Core\FbDatabase;
-use FrontisBlocks\Core\Blocks;
 use FrontisBlocks\Assets\AssetsGenerator;
+use FrontisBlocks\Utils\Helper;
 
 /**
  * Settings
@@ -15,95 +14,101 @@ use FrontisBlocks\Assets\AssetsGenerator;
  */
 class Settings extends AjaxBase {
 
-    use Singleton;
+	use Singleton;
 
-    /**
-     * register_ajax_events
-     *
-     * @return void
-     */
-    public function register_ajax_events() {
-        $ajax_events = [
-            'get_options',
-            'default_content_width',
-            'button_inherit_from_theme',
-            'container_padding',
-            'container_elements_gap',
-            'custom_css',
-            'copy_paste_style',
-            'file_generation',
-            'generate_assets',
-            'version_control',
-            'enable_quick_action_bar',
-            'collapse_panel',
-            'enable_templates_button',
-            'save_blocks',
-            'get_blocks',
-            'recaptcha_v2_site_key',
-            'recaptcha_v2_secret_key',
-            'recaptcha_v3_site_key',
-            'recaptcha_v3_secret_key',
-            'google_maps_api_key',
-            'instagram_access_token',
-            'coming_soon_mode',
-            'maintenance_mode',
-            'coming_soon_page_id',
-            'maintenance_page_id',
-            'upload_custom_icons',
-            'get_custom_icons_category'
-        ];
+	/**
+	 * register_ajax_events
+	 *
+	 * @return void
+	 */
+	public function register_ajax_events() {
+		$ajax_events = [
+			'get_options',
+			'default_content_width',
+			'container_column_gap',
+			'container_row_gap',
+			'container_padding',
+			'custom_css',
+			'automatic_block_recovery',
+			'copy_paste_style',
+			'file_generation',
+			'generate_assets',
+			'version_control',
+			'enable_quick_action_bar',
+			'collapse_panel',
+			'enable_templates_button',
+			'save_blocks',
+			'get_blocks',
+			'recaptcha_v2_site_key',
+			'recaptcha_v2_secret_key',
+			'recaptcha_v3_site_key',
+			'recaptcha_v3_secret_key',
+			'google_maps_api_key',
+			'instagram_access_token',
+			'coming_soon_mode',
+			'maintenance_mode',
+			'coming_soon_page_id',
+			'maintenance_page_id',
+			'upload_custom_icons',
+			'get_custom_icons_category',
+			'update_allowed_blocks',
+			'get_allowed_blocks'
+		];
 
-        $this->init_ajax_events($ajax_events);
+		$this->init_ajax_events($ajax_events);
+	}
+
+	public function get_options() {
+		if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
+			wp_send_json_error(['message' => 'Invalid nonce'], 400);
+			return;
+		}
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(['message' => 'Insufficient permissions'], 403);
+			return;
+		}
+
+		$keys = isset($_POST['keys']) ? $_POST['keys'] : [];
+		$options = [];
+
+		foreach ($keys as $key) {
+			$options[$key] = get_option("fb_$key");
+		}
+
+		wp_send_json_success($options);
+	}
+
+	// Individual option handlers
+	public function default_content_width() {
+		$this->handle_option_update('default_content_width', 'number');
+	}
+
+	public function container_column_gap() {
+		$this->handle_option_update('container_column_gap', 'number');
+	}
+
+	public function container_row_gap() {
+		$this->handle_option_update('container_row_gap', 'number');
+	}
+
+	public function container_padding() {
+		$this->handle_option_update('container_padding', 'number');
+	}
+
+	public function custom_css() {
+		$this->handle_option_update('custom_css', 'boolean');
+	}
+    public function automatic_block_recovery() {
+        $this->handle_option_update('automatic_block_recovery', 'boolean');
     }
 
-    public function get_options() {
-        if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
-            wp_send_json_error(['message' => 'Invalid nonce'], 400);
-            return;
-        }
+	public function copy_paste_style() {
+		$this->handle_option_update('copy_paste_style', 'boolean');
+	}
 
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => 'Insufficient permissions'], 403);
-            return;
-        }
-
-        $keys = isset($_POST['keys']) ? $_POST['keys'] : [];
-        $options = [];
-
-        foreach ($keys as $key) {
-            $options[$key] = get_option("fb_$key");
-        }
-
-        wp_send_json_success($options);
-    }
-
-    // Individual option handlers
-    public function default_content_width() {
-        $this->handle_option_update('default_content_width', 'number');
-    }
-
-    public function button_inherit_from_theme() {
-        $this->handle_option_update('button_inherit_from_theme', 'boolean');
-    }
-
-    public function container_padding() {
-        $this->handle_option_update('container_padding', 'number');
-    }
-
-    public function container_elements_gap() {
-        $this->handle_option_update('container_elements_gap', 'number');
-    }
-
-    public function custom_css() {
-        $this->handle_option_update('custom_css', 'boolean');
-    }
-
-    public function copy_paste_style() {
-        $this->handle_option_update('copy_paste_style', 'boolean');
-    }
-
-    public function file_generation() {
-    	if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
+	public function file_generation() {
+		if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
 			wp_send_json_error(['message' => 'Invalid nonce'], 400);
 			return;
 		}
@@ -111,62 +116,105 @@ class Settings extends AjaxBase {
 		if (!current_user_can('manage_options')) {
 			wp_send_json_error(['message' => 'Insufficient permissions'], 403);
 		}
+	}
 
+	/**
+	 * generate_assets
+	 *
+	 * @return void
+	 */
+	public function generate_assets() {
+		if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
+			wp_send_json_error(['message' => 'Invalid nonce'], 400);
+		}
 
-//         $this->handle_option_update('file_generation', 'boolean');
-    }
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(['message' => 'Insufficient permissions'], 403);
+		}
 
-    /**
-     * generate_assets
-     *
-     * @return void
-     */
-    public function generate_assets() {
-        if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
-            wp_send_json_error(['message' => 'Invalid nonce'], 400);
-        }
-
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => 'Insufficient permissions'], 403);
-        }
-
-        // Upload directory path
-		$response = $this->get_all_pages_post_ids_with_content();
+		// Upload directory path
+		$response = $this->generate_assets_for_post();
 
 		if($response) {
 			wp_send_json_success(['message' => 'CSS generated successfully']);
 		}
 
 		wp_send_json_error(['message' => 'Failed to generate css.'], 500);
-    }
+	}
 
 
-    // Get all pages, posts, custom post, etc post ids and get post content
-    public function get_all_pages_post_ids_with_content()
+	// Get all pages, posts, custom post, etc post ids and get post content
+	public function generate_assets_for_post()
 	{
-        $upload_directory = WP_CONTENT_DIR . '/uploads/frontis-blocks/';
-
-        // Delete existing upload directory if it exists
-        if (is_dir($upload_directory)) {
-            $this->delete_folder($upload_directory);
-        }
-
 		global $wpdb;
+		$upload_directory = WP_CONTENT_DIR . '/uploads/frontis-blocks/';
+
+		if (!is_dir($upload_directory)) {
+			if (!mkdir($upload_directory, 0755, true)) {
+				wp_send_json_error(['message' => 'Failed to create upload directory']);
+				return;
+			}
+		}
+
+		// Generate global assets
+		AssetsGenerator::generate_global_assets();
 
 		// Query to get all post IDs
 		$query = "SELECT ID, post_content, post_name
           FROM {$wpdb->posts}
           WHERE post_status = 'publish'
           AND post_name != 'wp-global-styles-frontis-theme'
+          AND post_type NOT IN ('wp_font_family', 'wp_navigation', 'wp_global_styles', 'wp_font_face', 'attachment', 'mc4wp-form', 'acf-post-type')
           ORDER BY post_date DESC";
 		$results = $wpdb->get_results($query);
+// 		$query = "SELECT ID, post_content, post_name
+//           FROM {$wpdb->posts}
+//           WHERE post_status = 'publish'
+//           AND post_name != 'wp-global-styles-frontis-theme'
+//           AND post_type NOT IN ('wp_font_family', 'wp_navigation', 'wp_global_styles', 'wp_font_face', 'attachment', 'mc4wp-form', 'acf-post-type')
+//           AND ID IN (3742)
+//           ORDER BY post_date DESC";
+// $results = $wpdb->get_results($query);
 
 		$generatedPages = [];
-		foreach ($results as $post) {
-			AssetsGenerator::get_instance()->generate_page_assets($post->ID, $post);
-			$generatedPages[] = $post->post_name;
+		
+		if(!empty($results)) {
+			foreach ($results as $post) {
+				$modified_post = $post;
+				$post_content = $post->post_content;
+	
+				// Get synced pattern contents
+				$pattern_contents = Helper::check_patterns_used($post->post_content);
+	
+				// Append pattern contents to post_content
+				if (!empty($pattern_contents)) {
+					foreach ($pattern_contents as $pattern_content) {
+						$post_content .= "\n" . $pattern_content; // Append each pattern content
+					}
+	
+					// Pass modified post object to generate_page_assets
+					$modified_post->post_content = $post_content; // Update post object
+				}
+	
+				// if($post->post_name == 'home-2-2') {
+					$myfile = fopen("assetsgeneration.txt", "w") or die("Unable to open file!");
+					$txt = $post->post_content;
+					fwrite($myfile, $txt);
+					fclose($myfile);
+				// }
+	
+				$pattern = "/frontis-blocks/i";
+				update_post_meta($post->ID, 'frontis_blocks_used', false);
+	
+				if(preg_match_all($pattern, $post->post_content) > 0) {
+					update_post_meta($post->ID, 'frontis_blocks_used', true);
+				}
+	
+				AssetsGenerator::get_instance()->generate_page_assets($post->ID, $modified_post);
+				$generatedPages[] = $post->post_name;
+			}
 		}
-
+		
 		$upload_directory = WP_CONTENT_DIR . '/uploads/frontis-blocks/';
 		$files = glob($upload_directory . "/*");
 
@@ -183,239 +231,305 @@ class Settings extends AjaxBase {
 		}
 
 		return false;
-    }
+	}
 
-    /**
-     * generate_assets_on_activation_update
-     */
-    public function generate_assets_on_activation_update() {
-        $response = $this->get_all_pages_post_ids_with_content();
-    
-        if ($response) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	/**
+	 * generate_assets_on_activation_update
+	 */
+	public function generate_assets_on_activation_update() {
+		$response = $this->generate_assets_for_post();
 
-    /**
-     * delete_folder
-     *
-     * @param string $folder_path
-     * @return void
-     */
-    private function delete_folder($folder_path) {
-        if (!is_dir($folder_path)) {
-            return false;
-        }
+		if ($response) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-        $files = array_diff(scandir($folder_path), ['.', '..']);
-        foreach ($files as $file) {
-            $file_path = $folder_path . DIRECTORY_SEPARATOR . $file;
-            if (is_dir($file_path)) {
-                $this->delete_folder($file_path); // Recursive call for subfolders
-            } else {
-                unlink($file_path); // Delete file
-            }
-        }
+	/**
+	 * delete_folder
+	 *
+	 * @param string $folder_path
+	 * @return void
+	 */
+	private function delete_folder($folder_path) {
+		if (!is_dir($folder_path)) {
+			return false;
+		}
 
-        return rmdir($folder_path); // Remove the directory itself
-    }
+		$files = array_diff(scandir($folder_path), ['.', '..']);
+		foreach ($files as $file) {
+			$file_path = $folder_path . DIRECTORY_SEPARATOR . $file;
+			if (is_dir($file_path)) {
+				$this->delete_folder($file_path); // Recursive call for subfolders
+			} else {
+				unlink($file_path); // Delete file
+			}
+		}
 
-    public function version_control() {
-        $this->handle_option_update('version_control', 'text');
-    }
+		return rmdir($folder_path); // Remove the directory itself
+	}
 
-    public function enable_quick_action_bar() {
-        $this->handle_option_update('enable_quick_action_bar', 'boolean');
-    }
+	public function version_control() {
+		$this->handle_option_update('version_control', 'text');
+	}
 
-    public function collapse_panel() {
-        $this->handle_option_update('collapse_panel', 'boolean');
-    }
+	public function enable_quick_action_bar() {
+		$this->handle_option_update('enable_quick_action_bar', 'boolean');
+	}
 
-    public function enable_templates_button() {
-        $this->handle_option_update('enable_templates_button', 'boolean');
-    }
+	public function collapse_panel() {
+		$this->handle_option_update('collapse_panel', 'boolean');
+	}
 
-    /**
-     * handle_option_update
-     *
-     * @param string $option_name
-     * @param string $type
-     * @return void
-     */
-    private function handle_option_update($option_name, $type) {
-        if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
-            wp_send_json_error(['message' => 'Invalid nonce'], 400);
-            return;
-        }
+	public function enable_templates_button() {
+		$this->handle_option_update('enable_templates_button', 'boolean');
+	}
 
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => 'Insufficient permissions'], 403);
-            return;
-        }
+	public function get_allowed_blocks()
+	{
+		if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
+			wp_send_json_error(['message' => 'Invalid nonce'], 400);
+			return;
+		}
 
-        $value = isset($_POST['value']) ? $this->sanitize_option_value($_POST['value'], $type) : '';
-        $old_value = get_option("fb_$option_name");
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(['message' => 'Insufficient permissions'], 403);
+			return;
+		}
 
-        // Convert old_value to the correct type for comparison
-        $old_value = $this->sanitize_option_value($old_value, $type);
+		$allowed_blocks = get_option("fb_update_allowed_blocks");
 
-        if ($old_value === $value) {
-            wp_send_json_success(['message' => 'No changes were made']);
-            return;
-        }
+		if($allowed_blocks) {
+			$allowed_blocks = json_decode($allowed_blocks);
+			wp_send_json_success($allowed_blocks);
+		} else {
+			wp_send_json_error([
+				'message' => 'Allowed blocks not found.',
+			]);
+		}
+	}
 
-        $updated = update_option("fb_$option_name", $value);
+	public function update_allowed_blocks()
+	{
+		if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
+			wp_send_json_error(['message' => 'Invalid nonce'], 400);
+			return;
+		}
 
-        if ($updated) {
-            wp_send_json_success(['message' => 'Option updated successfully']);
-        } else {
-            $error_message = 'Failed to update option';
-            if ($old_value === false) {
-                $error_message .= ': Option does not exist';
-            } elseif ($old_value === $value) {
-                $error_message .= ': Value unchanged';
-            } else {
-                $error_message .= ': Unknown reason';
-            }
-            wp_send_json_error([
-                'message' => $error_message,
-                'old_value' => $old_value,
-                'new_value' => $value,
-                'option_name' => "fb_$option_name"
-            ]);
-        }
-    }
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(['message' => 'Insufficient permissions'], 403);
+			return;
+		}
 
-    /**
-     * sanitize_option_value
-     *
-     * @param mixed $value
-     * @param string $type
-     * @return mixed
-     */
-    private function sanitize_option_value($value, $type) {
-        switch ($type) {
-            case 'number':
-                return intval($value);
-            case 'boolean':
-                return $value === '1' || $value === 'true' || $value === true;
-            case 'text':
-                return sanitize_text_field($value);
-            default:
-                return sanitize_text_field($value);
-        }
-    }
+		$allowed_blocks = isset($_POST['data']) ? ($_POST['data']) : [];
 
-    // New method to save blocks
-    public function save_blocks() {
-        if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
-            wp_send_json_error(['message' => 'Invalid nonce'], 400);
-            return;
-        }
+		$value =  json_encode($allowed_blocks);
 
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => 'Insufficient permissions'], 403);
-            return;
-        }
+		$old_value = get_option("fb_update_allowed_blocks");
 
-        $blocks = isset($_POST['blocks']) ? json_decode(stripslashes($_POST['blocks']), true) : [];
-        $activeBlocks = get_option('fb_active_blocks');
+		$updated = update_option("fb_update_allowed_blocks", $value);
 
-        if (!is_array($blocks)) {
-            wp_send_json_error(['message' => 'Invalid blocks data'], 400);
-            return;
-        }
+		if ($updated) {
+			wp_send_json_success(['message' => 'Option updated successfully']);
+		} else {
+			$error_message = 'Failed to update option';
+			if ($old_value === false) {
+				$error_message .= ': Option does not exist';
+			} elseif ($old_value === $value) {
+				$error_message .= ': Value unchanged';
+			} else {
+				$error_message .= ': Unknown reason';
+			}
+			wp_send_json_error([
+				'message' => $error_message,
+				'old_value' => $old_value,
+				'new_value' => $value,
+				'option_name' => "fb_update_allowed_blocks"
+			]);
+		}
+	}
 
-        if($activeBlocks) {
-            foreach ($blocks as $key => $value) {
-                if ($value === true) {
-                    $activeBlocks[$key] = true;
-                } else {
-                    $activeBlocks[$key] = false;
-                }
-            }
+	/**
+	 * handle_option_update
+	 *
+	 * @param string $option_name
+	 * @param string $type
+	 * @return void
+	 */
+	private function handle_option_update($option_name, $type) {
+		if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
+			wp_send_json_error(['message' => 'Invalid nonce'], 400);
+			return;
+		}
 
-            $blocks = $activeBlocks;
-        }
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(['message' => 'Insufficient permissions'], 403);
+			return;
+		}
 
-        $updated = update_option('fb_active_blocks', $blocks, true);
+		$post_value = isset($_POST['value']) ? ($_POST['value']) : [];
 
-        if ($updated) {
-            wp_send_json_success(['message' => 'Blocks updated successfully']);
-        } else {
-            wp_send_json_error(['message' => 'Failed to update blocks']);
-        }
-    }
+		$value =  json_encode($post_value);
 
-    public function get_blocks() {
-        if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
-            error_log('Invalid nonce in get_blocks');
-            wp_send_json_error(['message' => 'Invalid nonce'], 400);
-            return;
-        }
+		$old_value = get_option("fb_$option_name");
+		// Convert old_value to the correct type for comparison
+		// $old_value = $this->sanitize_option_value($old_value, $type);
 
-        if (!current_user_can('manage_options')) {
-            error_log('Insufficient permissions in get_blocks');
-            wp_send_json_error(['message' => 'Insufficient permissions'], 403);
-            return;
-        }
+		if ($old_value === $value) {
+			wp_send_json_success(['message' => 'No changes were made']);
+			return;
+		}
 
-        $activeBlocks = get_option('fb_active_blocks', []);
+		$updated = update_option("fb_$option_name", $value);
 
-        // Ensure all blocks from BlockList are included, defaulting to false if not in activeBlocks
-        $allBlocks = BlockList::get_instance()->get_blocks();
-        $completeBlocks = array_merge(
-            array_fill_keys(array_keys($allBlocks), false),
-            $activeBlocks
-        );
+		if ($updated) {
+			wp_send_json_success(['message' => 'Option updated successfully']);
+		} else {
+			$error_message = 'Failed to update option';
+			if ($old_value === false) {
+				$error_message .= ': Option does not exist';
+			} elseif ($old_value === $value) {
+				$error_message .= ': Value unchanged';
+			} else {
+				$error_message .= ': Unknown reason';
+			}
+			wp_send_json_error([
+				'message' => $error_message,
+				'old_value' => $old_value,
+				'new_value' => $value,
+				'option_name' => "fb_$option_name"
+			]);
+		}
+	}
 
-        wp_send_json_success($completeBlocks);
-    }
+	/**
+	 * sanitize_option_value
+	 *
+	 * @param mixed $value
+	 * @param string $type
+	 * @return mixed
+	 */
+	private function sanitize_option_value($value, $type) {
+		switch ($type) {
+			case 'number':
+				return intval($value);
+			case 'boolean':
+				return $value === '1' || $value === 'true' || $value === true;
+			case 'text':
+				return sanitize_text_field($value);
+			default:
+				return sanitize_text_field($value);
+		}
+	}
 
-    public function recaptcha_v2_site_key() {
-        $this->handle_option_update('recaptcha_v2_site_key', 'text');
-    }
+	// New method to save blocks
+	public function save_blocks() {
+		if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
+			wp_send_json_error(['message' => 'Invalid nonce'], 400);
+			return;
+		}
 
-    public function recaptcha_v2_secret_key() {
-        $this->handle_option_update('recaptcha_v2_secret_key', 'text');
-    }
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(['message' => 'Insufficient permissions'], 403);
+			return;
+		}
 
-    public function recaptcha_v3_site_key() {
-        $this->handle_option_update('recaptcha_v3_site_key', 'text');
-    }
+		$blocks = isset($_POST['blocks']) ? json_decode(stripslashes($_POST['blocks']), true) : [];
+		$activeBlocks = get_option('fb_active_blocks');
 
-    public function recaptcha_v3_secret_key() {
-        $this->handle_option_update('recaptcha_v3_secret_key', 'text');
-    }
+		if (!is_array($blocks)) {
+			wp_send_json_error(['message' => 'Invalid blocks data'], 400);
+			return;
+		}
 
-    public function google_maps_api_key() {
-        $this->handle_option_update('google_maps_api_key', 'text');
-    }
+		if($activeBlocks) {
+			foreach ($blocks as $key => $value) {
+				if ($value === true) {
+					$activeBlocks[$key] = true;
+				} else {
+					$activeBlocks[$key] = false;
+				}
+			}
 
-    public function instagram_access_token() {
-        $this->handle_option_update('instagram_access_token', 'text');
-    }
+			$blocks = $activeBlocks;
+		}
 
-    public function coming_soon_mode() {
-        $this->handle_option_update('coming_soon_mode', 'boolean');
-    }
+		$updated = update_option('fb_active_blocks', $blocks, true);
 
-    public function maintenance_mode() {
-        $this->handle_option_update('maintenance_mode', 'boolean');
-    }
+		if ($updated) {
+			wp_send_json_success(['message' => 'Blocks updated successfully']);
+		} else {
+			wp_send_json_error(['message' => 'Failed to update blocks']);
+		}
+	}
 
-    public function coming_soon_page_id() {
-        $this->handle_option_update('coming_soon_page_id', 'text');
-    }
+	public function get_blocks() {
+		if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
+			error_log('Invalid nonce in get_blocks');
+			wp_send_json_error(['message' => 'Invalid nonce'], 400);
+			return;
+		}
 
-    public function maintenance_page_id() {
-        $this->handle_option_update('maintenance_page_id', 'text');
-    }
+		if (!current_user_can('manage_options')) {
+			error_log('Insufficient permissions in get_blocks');
+			wp_send_json_error(['message' => 'Insufficient permissions'], 403);
+			return;
+		}
 
-    public function get_custom_icons_category() {
+		$activeBlocks = get_option('fb_active_blocks', []);
+
+		// Ensure all blocks from BlockList are included, defaulting to false if not in activeBlocks
+		$allBlocks = BlockList::get_instance()->get_blocks();
+		$completeBlocks = array_merge(
+			array_fill_keys(array_keys($allBlocks), false),
+			$activeBlocks
+		);
+
+		wp_send_json_success($completeBlocks);
+	}
+
+	public function recaptcha_v2_site_key() {
+		$this->handle_option_update('recaptcha_v2_site_key', 'text');
+	}
+
+	public function recaptcha_v2_secret_key() {
+		$this->handle_option_update('recaptcha_v2_secret_key', 'text');
+	}
+
+	public function recaptcha_v3_site_key() {
+		$this->handle_option_update('recaptcha_v3_site_key', 'text');
+	}
+
+	public function recaptcha_v3_secret_key() {
+		$this->handle_option_update('recaptcha_v3_secret_key', 'text');
+	}
+
+	public function google_maps_api_key() {
+		$this->handle_option_update('google_maps_api_key', 'text');
+	}
+
+	public function instagram_access_token() {
+		$this->handle_option_update('instagram_access_token', 'text');
+	}
+
+	public function coming_soon_mode() {
+		$this->handle_option_update('coming_soon_mode', 'boolean');
+	}
+
+	public function maintenance_mode() {
+		$this->handle_option_update('maintenance_mode', 'boolean');
+	}
+
+	public function coming_soon_page_id() {
+		$this->handle_option_update('coming_soon_page_id', 'text');
+	}
+
+	public function maintenance_page_id() {
+		$this->handle_option_update('maintenance_page_id', 'text');
+	}
+
+	public function get_custom_icons_category() {
 		if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
 			wp_send_json_error(['message' => 'Invalid nonce'], 400);
 			return;
@@ -454,19 +568,19 @@ class Settings extends AjaxBase {
 			$icons = get_option('fb_custom_icons');
 			wp_send_json_success(['categories' => $categories, 'names' => $icons_name, 'icons' => $icons]);
 		}else {
-		 	wp_send_json_error(['message' => 'Categories not found']);
-	 	}
-    }
+			wp_send_json_error(['message' => 'Categories not found']);
+		}
+	}
 
-    public function upload_custom_icons() {
-    	if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
+	public function upload_custom_icons() {
+		if (!check_ajax_referer('fb_settings_nonce', 'security', false)) {
 			wp_send_json_error(['message' => 'Invalid nonce'], 400);
 			return;
 		}
 
 		if ( ! class_exists( 'PclZip' ) ) {
-            require_once ABSPATH . 'wp-admin/includes/class-pclzip.php';
-        }
+			require_once ABSPATH . 'wp-admin/includes/class-pclzip.php';
+		}
 
 		global $wpdb;
 		$meta_key = 'fb_custom_icon';
@@ -540,53 +654,53 @@ class Settings extends AjaxBase {
 								} else {
 
 									// Extract width, height, and viewBox from SVG tag
-                                    preg_match('/width="([0-9]+)px"/', $svgContent, $widthMatch);
-                                    preg_match('/height="([0-9]+)px"/', $svgContent, $heightMatch);
-                                    preg_match('/viewBox="([^"]+)"/', $svgContent, $viewBoxMatch);
+									preg_match('/width="([0-9]+)px"/', $svgContent, $widthMatch);
+									preg_match('/height="([0-9]+)px"/', $svgContent, $heightMatch);
+									preg_match('/viewBox="([^"]+)"/', $svgContent, $viewBoxMatch);
 
-                                    $width = isset($widthMatch[1]) ? (int)$widthMatch[1] : 320;  // Default width if not found
-                                    $height = isset($heightMatch[1]) ? (int)$heightMatch[1] : 512; // Default height if not found
-                                    $viewBox = isset($viewBoxMatch[1]) ? $viewBoxMatch[1] : '0 0 24 24'; // Default viewBox if not found
+									$width = isset($widthMatch[1]) ? (int)$widthMatch[1] : 320;  // Default width if not found
+									$height = isset($heightMatch[1]) ? (int)$heightMatch[1] : 512; // Default height if not found
+									$viewBox = isset($viewBoxMatch[1]) ? $viewBoxMatch[1] : '0 0 24 24'; // Default viewBox if not found
 
-                                    // Remove XML declaration and <svg> tag attributes, keeping only inner SVG elements
-                                    $svgInnerContent = preg_replace('/<svg[^>]*>|<\/svg>/', '', $svgContent);
+									// Remove XML declaration and <svg> tag attributes, keeping only inner SVG elements
+									$svgInnerContent = preg_replace('/<svg[^>]*>|<\/svg>/', '', $svgContent);
 
-                                    // Extract individual SVG elements and their attributes dynamically
-                                    $svgElements = [];
-                                    preg_match_all('/<(\w+)([^>]*)>/', $svgInnerContent, $matches, PREG_SET_ORDER);
+									// Extract individual SVG elements and their attributes dynamically
+									$svgElements = [];
+									preg_match_all('/<(\w+)([^>]*)>/', $svgInnerContent, $matches, PREG_SET_ORDER);
 
-                                    foreach ($matches as $match) {
-                                        $tag = $match[1];
-                                        $attributes = [];
+									foreach ($matches as $match) {
+										$tag = $match[1];
+										$attributes = [];
 
-                                        // Match each attribute within the element
-                                        preg_match_all('/(\w+)="([^"]*)"/', $match[2], $attrMatches, PREG_SET_ORDER);
-                                        foreach ($attrMatches as $attrMatch) {
-                                            $attributes[$attrMatch[1]] = $attrMatch[2];
-                                        }
+										// Match each attribute within the element
+										preg_match_all('/(\w+)="([^"]*)"/', $match[2], $attrMatches, PREG_SET_ORDER);
+										foreach ($attrMatches as $attrMatch) {
+											$attributes[$attrMatch[1]] = $attrMatch[2];
+										}
 
-                                        $svgElements[] = [
-                                            'type' => $tag,
-                                            'attributes' => $attributes,
-                                        ];
-                                    }
+										$svgElements[] = [
+											'type' => $tag,
+											'attributes' => $attributes,
+										];
+									}
 
-                                    $icon_name = str_replace(' ', '-', $icon_name);
+									$icon_name = str_replace(' ', '-', $icon_name);
 
-                                    // Prepare the formatted array
-                                    $custom_icons[$icon_name] = [
-                                         "svg" => [
-											 "solid" => [
-												 "width" => $width,
-												 "height" => $height,
-												 "viewBox" => $viewBox,
-												 "elements" => $svgElements,
-											 ],
-										 ],
-										 "label" => str_replace(' ', ' ', ucwords(str_replace('-', ' ', $icon_name))),
-										 "custom_categories" => $single_icon->post_name,
-										 "custom_icons" => true
-                                    ];
+									// Prepare the formatted array
+									$custom_icons[$icon_name] = [
+										"svg" => [
+											"solid" => [
+												"width" => $width,
+												"height" => $height,
+												"viewBox" => $viewBox,
+												"elements" => $svgElements,
+											],
+										],
+										"label" => str_replace(' ', ' ', ucwords(str_replace('-', ' ', $icon_name))),
+										"custom_categories" => $single_icon->post_name,
+										"custom_icons" => true
+									];
 
 									if(!in_array($icon_name, $custom_icons_name)) {
 										$custom_icons_name[] = $icon_name;
@@ -607,5 +721,5 @@ class Settings extends AjaxBase {
 			update_option('fb_custom_icons', $custom_icons, true);
 			update_option('fb_custom_icons_name', $custom_icons_name, true);
 		}
-    }
+	}
 }

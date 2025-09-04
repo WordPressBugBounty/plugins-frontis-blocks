@@ -1,11 +1,12 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "frontis-blocks/marquee-carousel",
   "version": "1.0.0",
   "title": "Marquee Carousel",
+  "icon": "slides",
   "category": "frontis-blocks",
-  "description": "Marquee Carousel block",
+  "description": "Create an engaging marquee carousel with smooth transitions and customizable settings.",
   "example": {},
   "supports": {
     "html": false,

@@ -13,7 +13,8 @@
       "wide",
       "full"
     ],
-    "customClassName": false
+    "customClassName": false,
+    "html": false
   },
   "textdomain": "frontis-blocks",
   "editorScript": "file:./index.js",

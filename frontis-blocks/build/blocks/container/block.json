@@ -5,11 +5,11 @@
   "version": "1.0.0",
   "title": "Container",
   "category": "frontis-blocks",
-  "description": "Container block",
+  "description": "Empower dynamic and adaptable page structures through responsive flexbox containers.",
   "example": {},
   "supports": {
-    "anchor": true,
-    "html": true,
+    "anchor": false,
+    "html": false,
     "customClassName": false
   },
   "textdomain": "frontis-blocks",
